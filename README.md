@@ -1,2 +1,2 @@
-# GROUP25-CHESS
-Chess game project for group 25
+# GROUP25-Project
+Project repository for group 25
