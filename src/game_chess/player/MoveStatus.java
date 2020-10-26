@@ -1,0 +1,32 @@
+package game_chess.player;
+
+/**
+ * Author: Onanefe Osah
+ * Author: Osama
+ * Date Created:
+ *
+ * Move status enum to check the status of the board after a move is made
+ * **/
+
+public enum MoveStatus {
+    DONE{
+        @Override
+        boolean isDone() {
+            return true;
+        }
+    },
+   ILLEGAL_MOVE {
+       @Override
+       boolean isDone() {
+           return false;
+       }
+   },
+    LEAVES_PLAYER_IN_CHECK{
+        @Override
+        boolean isDone() {
+            return false;
+        }
+    };
+
+    abstract boolean isDone();
+}
