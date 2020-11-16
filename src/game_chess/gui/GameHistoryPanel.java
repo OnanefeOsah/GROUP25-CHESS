@@ -11,7 +11,14 @@ import java.util.List;
 
 import static game_chess.gui.Frame.*;
 
-//Cretaed by Adeoluwa Oyefeso
+/**
+ * Author: Ade Oyefeso
+ * Author: Robert Odoh
+ * Date Created:
+ *
+ * One of the GUI class for the Board
+ * This class is for a panel that shows and records the moves made by each player in the game
+ * **/
 
 
 //creating the game history panel

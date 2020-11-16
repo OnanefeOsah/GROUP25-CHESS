@@ -16,6 +16,15 @@ import game_chess.engine.board.Move;
 import game_chess.engine.pieces.Piece;
 import static game_chess.gui.Frame.*;
 
+/**
+ * Author: Ade Oyefeso
+ * Author: Robert Odoh
+ * Date Created:
+ *
+ * One of the GUI classes for the Board
+ * This class is a panel for the pieces taken during the game
+ * **/
+
 public class TakenPiecesPanel extends JPanel{
 
 	private final JPanel northPanel;

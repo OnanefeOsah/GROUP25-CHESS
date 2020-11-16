@@ -28,6 +28,8 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
  * Date Created:
  *
  * GUI class for the Board
+ * This class contains subclasses for a board panel and a tile panel
+ * The main GUI panel also contains a Game history panel and a taken pieces panel
  * **/
 
 public class Frame {
