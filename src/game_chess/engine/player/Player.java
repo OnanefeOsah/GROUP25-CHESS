@@ -1,15 +1,15 @@
-package game_chess.player;
+package game_chess.engine.player;
 
-import game_chess.Alliance;
-import game_chess.board.Board;
+import game_chess.engine.Alliance;
+import game_chess.engine.board.Board;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import game_chess.pieces.King;
-import game_chess.board.Move;
-import game_chess.pieces.Piece;
+import game_chess.engine.pieces.King;
+import game_chess.engine.board.Move;
+import game_chess.engine.pieces.Piece;
 import java.util.*;
 
 /**
@@ -76,7 +76,7 @@ public abstract class Player {
 
     //method to check if a "king" piece is being "checked" by an opposing piece
     public boolean isInCheck(){
-        return this.isInCheck();
+        return this.isInCheck;
     }
 
     //method to check if a "king" piece is being "checked" by an opposing piece and has no escape moves
@@ -86,7 +86,7 @@ public abstract class Player {
 
     //method to check if a "king" piece is not being "checked" by an opposing piece and has no escape moves
     public boolean isInStaleMate() {
-        return !this.isInCheck() && !hasEscapeMoves();
+        return !this.isInCheck && !hasEscapeMoves();
     }
 
     //method to check if a "king" piece is being "checked" by an opposing piece and has escape moves
@@ -111,12 +111,14 @@ public abstract class Player {
         }
 
         final Board transitionBoard = move.execute();
+
         //get opponents legal attack moves to a king piece
         final Collection<Move> kingAttacks = Player.calculateAttacksOnTile(transitionBoard.currentPlayer().getOpponent().getPlayerKing().getPiecePosition(), transitionBoard.currentPlayer().getLegalMoves());
 
         if (!kingAttacks.isEmpty()){
             return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
         }
+
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
 

@@ -1,7 +1,7 @@
-package game_chess.player;
+package game_chess.engine.player;
 
-import game_chess.board.Board;
-import game_chess.board.Move;
+import game_chess.engine.board.Board;
+import game_chess.engine.board.Move;
 
 /**
  * Created by :
@@ -24,5 +24,9 @@ public class MoveTransition{
     public MoveStatus getMoveStatus(){
         return this.moveStatus;
 }
+
+    public Board getTransitionBoard(){
+        return this.transitionBoard;
+    }
 
 }

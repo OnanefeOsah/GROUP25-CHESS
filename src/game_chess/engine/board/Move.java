@@ -1,8 +1,8 @@
-package game_chess.board;
+package game_chess.engine.board;
 
-import game_chess.pieces.Pawn;
-import game_chess.pieces.Piece;
-import game_chess.pieces.Rook;
+import game_chess.engine.pieces.Pawn;
+import game_chess.engine.pieces.Piece;
+import game_chess.engine.pieces.Rook;
 
 
 /**
@@ -16,18 +16,30 @@ import game_chess.pieces.Rook;
 
 public abstract class Move {
 
-    final Board board;
-    final Piece movedPiece;
-    final int destinationCoordinate;
+    protected final Board board;
+    protected final Piece movedPiece;
+    protected final int destinationCoordinate;
+    protected final boolean isFirstMove;
+
     public static final Move NULL_MOVE = new NullMove();
 
     private Move(final Board board, final Piece movedPiece, final int destinationCoordinate){
         this.board = board;
         this.movedPiece = movedPiece;
         this.destinationCoordinate = destinationCoordinate;
+        this.isFirstMove = movedPiece.isFirstMove();
     }
 
+    private Move(final Board board, final int destinationCoordinate){
+        this.board = board;
+        this.destinationCoordinate = destinationCoordinate;
+        this.movedPiece = null;
+        this.isFirstMove = false;
+    }
+
+
     //"hashcode" method overridden
+    @Override
     public int hashCode(){
         final int prime = 31;
         int result = 1;
@@ -48,7 +60,7 @@ public abstract class Move {
             return false;
         }
         final Move otherMove = (Move) other;
-        return getDestinationCoordinate() == otherMove.getDestinationCoordinate() && getMovedPiece().equals(otherMove.getMovedPiece());
+        return getCurrentCoordinate() == otherMove.getCurrentCoordinate() && getDestinationCoordinate() == otherMove.getDestinationCoordinate() && getMovedPiece().equals(otherMove.getMovedPiece());
     }
 
     public int getCurrentCoordinate() {
@@ -88,7 +100,7 @@ public abstract class Move {
             builder.setPiece(piece);
         }
 
-        builder.setMoveMaker(null);
+        builder.setPiece(this.movedPiece.movePiece(this));
         builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
         return builder.build();
     }
@@ -98,6 +110,15 @@ public abstract class Move {
 
         public Regular(final Board board, final Piece movedPiece, final int destinationCoordinate){
             super(board, movedPiece, destinationCoordinate);
+        }
+
+        @Override
+        public boolean equals(final Object other){
+            return this == other || other instanceof Regular && super.equals(other);
+        }
+        @Override
+        public String toString(){
+            return movedPiece.getPieceType().toString() + BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
 
     }
@@ -178,7 +199,7 @@ public abstract class Move {
 
     }
 
-    //Pawn jump move for each pawn in its starting position
+    //Pawn jump(2 space) move for each pawn in its starting position
     public static final class PawnJump extends Move{
 
         public PawnJump(final Board board,
@@ -186,7 +207,6 @@ public abstract class Move {
                         final int destinationCoordinate){
             super(board, movedPiece, destinationCoordinate);
         }
-
 
         @Override
         public Board execute() {
@@ -205,6 +225,10 @@ public abstract class Move {
             builder.setEnPassantPawn(movedPawn);
             builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
             return builder.build();
+        }
+        @Override
+        public String toString(){
+            return BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
         }
     }
 
@@ -277,7 +301,7 @@ public abstract class Move {
     public static final class NullMove extends Move {
 
         public NullMove() {
-            super(null,null, -1);
+            super(null, -1);
         }
 
         public Board execute(){

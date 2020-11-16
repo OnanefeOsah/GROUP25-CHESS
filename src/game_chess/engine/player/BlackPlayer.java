@@ -1,16 +1,18 @@
-package game_chess.player;
+package game_chess.engine.player;
 
-import game_chess.Alliance;
-import game_chess.board.Board;
-import game_chess.board.Move;
-import game_chess.board.Tile;
-import game_chess.pieces.Piece;
-import game_chess.pieces.Rook;
+import game_chess.engine.Alliance;
+import game_chess.engine.board.Board;
+import game_chess.engine.board.Move;
+import game_chess.engine.board.Tile;
+import game_chess.engine.pieces.Piece;
+import game_chess.engine.pieces.Rook;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import static game_chess.engine.board.Move.*;
 
 /**
  * Author: Onanefe Osah
@@ -53,7 +55,7 @@ public class BlackPlayer extends Player {
                 final Tile rookTile = this.board.getTile(7);
                 if(rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove() ){
                     if(Player.calculateAttacksOnTile(5,opponentsLegals).isEmpty() && Player.calculateAttacksOnTile(6, opponentsLegals).isEmpty() && rookTile.getPiece().getPieceType().isRook()){
-                        kingCastles.add(new Move.KingSideCastleMove(this.board, this.playerKing, 6, (Rook)rookTile.getPiece(), rookTile.getTileCoordinate(), 5));
+                        kingCastles.add(new KingSideCastleMove(this.board, this.playerKing, 6, (Rook)rookTile.getPiece(), rookTile.getTileCoordinate(), 5));
                     }
                 }
             }
@@ -61,8 +63,9 @@ public class BlackPlayer extends Player {
             //black queen side castle
             if (!this.board.getTile(1).isTileOccupied() && !this.board.getTile(2).isTileOccupied()&& !this.board.getTile(3).isTileOccupied()){
                 final Tile rookTile = this.board.getTile(0);
-                if(rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove()){
-                    kingCastles.add(new Move.QueenSideCastleMove(this.board, this.playerKing, 2,(Rook)rookTile.getPiece(), rookTile.getTileCoordinate(), 3));
+                if(rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove() && Player.calculateAttacksOnTile(2, opponentsLegals).isEmpty() &&
+                 Player.calculateAttacksOnTile(3, opponentsLegals).isEmpty() && rookTile.getPiece().getPieceType().isRook()){
+                    kingCastles.add(new QueenSideCastleMove(this.board, this.playerKing, 2,(Rook)rookTile.getPiece(), rookTile.getTileCoordinate(), 3));
                 }
             }
         }

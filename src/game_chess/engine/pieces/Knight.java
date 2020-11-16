@@ -1,17 +1,17 @@
-package game_chess.pieces;
+package game_chess.engine.pieces;
 
-import game_chess.Alliance;
-import game_chess.board.Board;
-import game_chess.board.BoardUtils;
-import game_chess.board.Move;
-import game_chess.board.Tile;
+import game_chess.engine.Alliance;
+import game_chess.engine.board.Board;
+import game_chess.engine.board.BoardUtils;
+import game_chess.engine.board.Move;
+import game_chess.engine.board.Tile;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static game_chess.board.Move.*;
+import static game_chess.engine.board.Move.*;
 
 /**
  * Author: Onanefe Osah
@@ -25,7 +25,10 @@ public class Knight extends Piece {
     private final static int[] CANDIDATE_MOVE_COORDINATE = {-17, -15, -10, -6, 6, 10, 15, 17};
 
     public Knight(final int piecePosition, final Alliance pieceAlliance) {
-        super(PieceType.KNIGHT,piecePosition, pieceAlliance);
+        super(PieceType.KNIGHT,piecePosition, pieceAlliance, true);
+    }
+    public Knight(final int piecePosition, final Alliance pieceAlliance, final boolean isFirstMove) {
+        super(PieceType.KNIGHT,piecePosition, pieceAlliance, isFirstMove);
     }
 
     @Override
@@ -89,7 +92,7 @@ public class Knight extends Piece {
     }
 
     private static boolean isEightColumnExclusion(final int currentPosition, final int candidateOffset){
-        return BoardUtils.EIGHT_COLUMN[currentPosition] && ( candidateOffset == -15 || candidateOffset == -6 || candidateOffset == 10 || candidateOffset == 17);
+        return BoardUtils.EIGHTH_COLUMN[currentPosition] && ( candidateOffset == -15 || candidateOffset == -6 || candidateOffset == 10 || candidateOffset == 17);
     }
 
 }

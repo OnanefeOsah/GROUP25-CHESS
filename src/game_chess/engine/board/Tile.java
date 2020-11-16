@@ -1,6 +1,6 @@
-package game_chess.board;
+package game_chess.engine.board;
 
-import game_chess.pieces.Piece;
+import game_chess.engine.pieces.Piece;
 
 import java.util.Collections;
 import java.util.HashMap;

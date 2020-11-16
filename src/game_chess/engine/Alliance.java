@@ -1,8 +1,8 @@
-package game_chess;
+package game_chess.engine;
 
-import game_chess.player.BlackPlayer;
-import game_chess.player.Player;
-import game_chess.player.WhitePlayer;
+import game_chess.engine.player.BlackPlayer;
+import game_chess.engine.player.Player;
+import game_chess.engine.player.WhitePlayer;
 
 /**
  * Author: Onanefe Osah
@@ -54,7 +54,7 @@ public enum Alliance {
 
         @Override
         public Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
-            return null;
+            return blackPlayer;
         }
     };
 

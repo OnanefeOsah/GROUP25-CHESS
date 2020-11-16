@@ -1,10 +1,10 @@
-package game_chess.board;
+package game_chess.engine.board;
 
-import game_chess.Alliance;
-import game_chess.pieces.*;
-import game_chess.player.Player;
-import game_chess.player.WhitePlayer;
-import game_chess.player.BlackPlayer;
+import game_chess.engine.Alliance;
+import game_chess.engine.pieces.*;
+import game_chess.engine.player.Player;
+import game_chess.engine.player.WhitePlayer;
+import game_chess.engine.player.BlackPlayer;
 import java.util.ArrayList;
 import java.util.*;
 
@@ -143,7 +143,7 @@ public class Board {
         builder.setPiece(new King(4, Alliance.BLACK));
         builder.setPiece(new Bishop(5, Alliance.BLACK));
         builder.setPiece(new Knight(6, Alliance.BLACK));
-        builder.setPiece(new Pawn(7, Alliance.BLACK));
+        builder.setPiece(new Rook(7, Alliance.BLACK));
         builder.setPiece(new Pawn(8, Alliance.BLACK));
         builder.setPiece(new Pawn(9, Alliance.BLACK));
         builder.setPiece(new Pawn(10, Alliance.BLACK));
