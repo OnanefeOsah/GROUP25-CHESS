@@ -21,7 +21,7 @@ import static game_chess.gui.Frame.*;
  * **/
 
 
-//creating the game history panel
+
 public class GameHistoryPanel extends JPanel{
 
 	private final DataModel model;
@@ -69,7 +69,7 @@ public class GameHistoryPanel extends JPanel{
 		vertical.setValue(vertical.getMaximum());
 	}
 
-	//calculating when the player is about to chekmate or check
+	//Validating when the player is about to checkmate or check
 	private String calculateCheckAndCheckMateHash(final Board board){
 		if (board.currentPlayer().isInCheckMate()) {
 			return "#";
