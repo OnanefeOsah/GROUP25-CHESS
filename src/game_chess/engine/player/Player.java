@@ -51,12 +51,12 @@ public abstract class Player {
     //method to check if a destination coordinate is under/can be attack(ed)
     protected static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves){
         final List<Move> attackMoves = new ArrayList<>();
-            for (final Move move : moves){
-                if(piecePosition == move.getDestinationCoordinate()) {
-                         attackMoves.add(move);
-                }
+        for (final Move move : moves){
+            if(piecePosition == move.getDestinationCoordinate()) {
+                attackMoves.add(move);
             }
-            return Collections.unmodifiableList(attackMoves);
+        }
+        return Collections.unmodifiableList(attackMoves);
     }
 
     //establishKing method to ensure there is a valid King for each player
@@ -104,6 +104,15 @@ public abstract class Player {
         return false;
     }
 
+    public boolean isKingSideCastleCapable(){
+        return this.playerKing.isKingSideCastleCapable();
+    }
+
+    public boolean isQueenSideCastleCapable(){
+        return this.playerKing.isQueenSideCastleCapable();
+    }
+
+
     public MoveTransition makeMove(final Move move){
 
         if (!isMoveLegal(move)){
@@ -132,5 +141,3 @@ public abstract class Player {
 
     protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegals, Collection<Move> opponentsLegals );
 }
-
-

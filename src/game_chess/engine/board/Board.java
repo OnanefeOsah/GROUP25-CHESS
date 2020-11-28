@@ -17,7 +17,7 @@ import java.util.*;
  * Board contains a nested class Builder to help with building the board
  * **/
 
-public class Board {
+public class Board{
 
     //List of all the tiles on the board
     private final List<Tile> gameBoard;
@@ -31,6 +31,8 @@ public class Board {
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
 
+    private final Pawn enPassantPawn;
+
     public Board(final Builder builder){
         //create a new board using the builder class
         this.gameBoard = createGameBoard(builder);
@@ -38,6 +40,7 @@ public class Board {
         //calculate and store all active pieces on the board
         this.whitePieces = calculateActivePieces(this.gameBoard , Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
+        this.enPassantPawn = builder.enPassantPawn;
 
         //calculate possible moves for each piece at current time
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
@@ -76,6 +79,10 @@ public class Board {
 
     public Player currentPlayer(){
         return this.currentPlayer;
+    }
+
+    public Pawn getEnPassantPawn() {
+        return this.enPassantPawn;
     }
 
     //method to return all current black pieces
@@ -125,7 +132,7 @@ public class Board {
     private static List<Tile> createGameBoard(final Builder builder){
         final Tile[] tiles = new Tile[BoardUtils.NUM_TILES ];
         for(int i = 0; i < BoardUtils.NUM_TILES ; i++){
-             tiles[i] = Tile.createTile(i, builder.boardConfig.get(i));
+            tiles[i] = Tile.createTile(i, builder.boardConfig.get(i));
         }
 
         return List.of(tiles);
@@ -140,7 +147,7 @@ public class Board {
         builder.setPiece(new Knight(1, Alliance.BLACK));
         builder.setPiece(new Bishop(2, Alliance.BLACK));
         builder.setPiece(new Queen(3, Alliance.BLACK));
-        builder.setPiece(new King(4, Alliance.BLACK));
+        builder.setPiece(new King(4, Alliance.BLACK, true, true));
         builder.setPiece(new Bishop(5, Alliance.BLACK));
         builder.setPiece(new Knight(6, Alliance.BLACK));
         builder.setPiece(new Rook(7, Alliance.BLACK));
@@ -168,7 +175,7 @@ public class Board {
         builder.setPiece(new Knight(57, Alliance.WHITE));
         builder.setPiece(new Bishop(58, Alliance.WHITE));
         builder.setPiece(new Queen(59, Alliance.WHITE));
-        builder.setPiece(new King(60, Alliance.WHITE));
+        builder.setPiece(new King(60, Alliance.WHITE, true, true));
         builder.setPiece(new Bishop(61, Alliance.WHITE));
         builder.setPiece(new Knight(62, Alliance.WHITE));
         builder.setPiece(new Rook(63, Alliance.WHITE));

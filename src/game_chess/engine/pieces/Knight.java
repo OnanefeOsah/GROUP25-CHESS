@@ -61,7 +61,7 @@ public class Knight extends Piece {
                     final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
 
                     if(this.pieceAlliance != pieceAlliance){
-                        legalMoves.add(new Attack(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                        legalMoves.add(new MajorAttack(board, this, candidateDestinationCoordinate, pieceAtDestination));
                     }
                 }
             }
@@ -88,7 +88,7 @@ public class Knight extends Piece {
     }
 
     private static boolean isSeventhColumnExclusion(final int currentPosition, final int candidateOffset){
-         return BoardUtils.SEVENTH_COLUMN[currentPosition] && (candidateOffset == -6 ||candidateOffset == 10);
+        return BoardUtils.SEVENTH_COLUMN[currentPosition] && (candidateOffset == -6 ||candidateOffset == 10);
     }
 
     private static boolean isEightColumnExclusion(final int currentPosition, final int candidateOffset){

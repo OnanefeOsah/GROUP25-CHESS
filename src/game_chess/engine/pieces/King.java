@@ -25,11 +25,31 @@ public class King extends Piece{
 
     private final static int[] CANDIDATE_MOVE_COORDINATE = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-    public King(final int piecePosition, final Alliance pieceAlliance) {
+    private final boolean isCastled;
+    private final boolean kingSideCastleCapable;
+    private final boolean queenSideCastleCapable;
+
+    public King(final int piecePosition, final Alliance pieceAlliance, final boolean kingSideCastleCapable, final boolean queenSideCastleCapable) {
         super(PieceType.KING, piecePosition, pieceAlliance, true);
+        this.isCastled = false;
+        this.kingSideCastleCapable = kingSideCastleCapable;
+        this.queenSideCastleCapable = queenSideCastleCapable;
     }
-    public King(final int piecePosition, final Alliance pieceAlliance, final boolean isFirstMove) {
+    public King(final int piecePosition, final Alliance pieceAlliance, final boolean isFirstMove, final boolean kingSideCastleCapable, final boolean queenSideCastleCapable, final boolean isCastled) {
         super(PieceType.KING, piecePosition, pieceAlliance, isFirstMove);
+        this.isCastled = isCastled;
+        this.kingSideCastleCapable = kingSideCastleCapable;
+        this.queenSideCastleCapable = queenSideCastleCapable;
+    }
+
+    public boolean isCastled(){
+        return this.isCastled;
+    }
+    public boolean isKingSideCastleCapable(){
+        return this.kingSideCastleCapable;
+    }
+    public boolean isQueenSideCastleCapable(){
+        return this.queenSideCastleCapable;
     }
 
     @Override
@@ -57,7 +77,7 @@ public class King extends Piece{
                     final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
 
                     if(this.pieceAlliance != pieceAlliance){
-                        legalMoves.add(new Attack(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                        legalMoves.add(new MajorAttack(board, this, candidateDestinationCoordinate, pieceAtDestination));
                     }
                 }
             }
@@ -66,7 +86,7 @@ public class King extends Piece{
     }
 
     public King movePiece(final Move move) {
-        return new King(move.getDestinationCoordinate(), move.getMovedPiece().getPieceAlliance());
+        return new King(move.getDestinationCoordinate(), move.getMovedPiece().getPieceAlliance(), false, move.isCastlingMove(), false, false);
     }
 
     @Override

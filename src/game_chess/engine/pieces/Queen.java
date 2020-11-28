@@ -4,12 +4,17 @@ import game_chess.engine.Alliance;
 import game_chess.engine.board.Board;
 import game_chess.engine.board.BoardUtils;
 import game_chess.engine.board.Move;
+import game_chess.engine.board.Move.MajorAttack;
 import game_chess.engine.board.Tile;
 
+import java.util.*;
+/**
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+ **/
+
 
 /**
  * Author: Onanefe Osah
@@ -30,7 +35,7 @@ public class Queen extends Piece{
     }
 
     @Override
-     public Collection<Move> calculateLegalMoves(final Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
 
         final List<Move> legalMoves = new ArrayList<>();
         for (final int candidateCoordinateOffset : CANDIDATE_MOVE_VECTOR_COORDINATE) {
@@ -54,7 +59,7 @@ public class Queen extends Piece{
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
 
                         if (this.pieceAlliance != pieceAlliance) {
-                            legalMoves.add(new Move.Attack(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                            legalMoves.add(new MajorAttack(board, this, candidateDestinationCoordinate, pieceAtDestination));
                         }
                         break;
                     }
@@ -62,7 +67,7 @@ public class Queen extends Piece{
             }
         }
         return Collections.unmodifiableList(legalMoves);
-     }
+    }
 
     public Queen movePiece(final Move move) {
         return new Queen(move.getDestinationCoordinate(), move.getMovedPiece().getPieceAlliance());

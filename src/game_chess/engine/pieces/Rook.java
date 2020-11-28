@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static game_chess.engine.board.Move.*;
+
 
 /**
  * Author: Onanefe Osah
@@ -60,7 +62,7 @@ public class Rook extends Piece {
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
 
                         if (this.pieceAlliance != pieceAlliance) {
-                            legalMoves.add(new Attack(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                            legalMoves.add(new MajorAttack(board, this, candidateDestinationCoordinate, pieceAtDestination));
                         }
                         break;
                     }

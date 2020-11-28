@@ -97,8 +97,8 @@ public abstract class Piece {
         },
         KNIGHT("N", 300) {
             public boolean isKing() {
-                        return false;
-                    }
+                return false;
+            }
             public boolean isRook(){
                 return false;
             }
