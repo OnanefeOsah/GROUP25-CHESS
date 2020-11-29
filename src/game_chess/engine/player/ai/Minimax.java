@@ -17,10 +17,12 @@ public class Minimax implements MoveStrategy {
 
     private final BoardEvaluator boardEvaluator;
     private final int searchDepth;
+    private long boardsEvaluated;
 
     public Minimax(final int searchDepth) {
         this.boardEvaluator = new StandardBoardEvaluator();
         this.searchDepth = searchDepth;
+        this.boardsEvaluated = 0;
     }
 
     @Override
@@ -70,8 +72,13 @@ public class Minimax implements MoveStrategy {
     }
 
 
+    public long getNumBoardsEvaluated() {
+        return this.boardsEvaluated;
+    }
+
     public int min(final Board board, final int depth) {
         if (depth == 0) {
+            this.boardsEvaluated++;
             return this.boardEvaluator.evaluate(board, depth);
         }
         int lowestSeenValue = Integer.MAX_VALUE;
@@ -89,6 +96,7 @@ public class Minimax implements MoveStrategy {
 
     public int max(final Board board, final int depth) {
         if (depth == 0) {
+            this.boardsEvaluated++;
             return this.boardEvaluator.evaluate(board, depth);
         }
         int highestSeenValue = Integer.MIN_VALUE;

@@ -33,8 +33,8 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 public class Frame extends Observable{
 
     private JFrame gameFrame;
-    private GameHistoryPanel gameHistoryPanel;
-    private TakenPiecesPanel takenPiecesPanel;
+    public GameHistoryPanel gameHistoryPanel;
+    public TakenPiecesPanel takenPiecesPanel;
     private BoardPanel boardPanel;
     private MoveLog moveLog;
     private GameSetup gameSetup;
@@ -44,20 +44,21 @@ public class Frame extends Observable{
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
     private Move computerMove;
-    private GameSetup temp;
+    public boolean gameStart = false;
+    private boolean checkMateCheck = false;
 
 
     private boolean highlightLegalMoves;
 
-    private final static Dimension OUTER_FRAME_DIMENSION = new Dimension(600,600);
-    private final static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
-    private final static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
+    public static Dimension OUTER_FRAME_DIMENSION = new Dimension(600,600);
+    public static Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
+    public static Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
 
     //path to the folder containing the piece pictures
     private static String defaultPieceImagesPath = "chess graphics/GIF-github/05/";
 
-    private Color lightTileColor = Color.decode("#808080");
-    private Color darkTileColor = Color.decode("#0000FF");
+    public Color lightTileColor = Color.decode("#808080");
+    public Color darkTileColor = Color.decode("#0000FF");
 
     private static final Frame INSTANCE = new Frame();
 
@@ -65,8 +66,6 @@ public class Frame extends Observable{
 
         this.gameFrame = new JFrame("CHESS 2D - Group 25");
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
-        this.gameSetup = new GameSetup(this.gameFrame, true);
-        this.temp = gameSetup;
         this.gameFrame.add(new TestPane());
         this.gameFrame.setLocationRelativeTo(null);
         this.gameFrame.setResizable(true);
@@ -94,7 +93,6 @@ public class Frame extends Observable{
          **/
     }
 
-
     public void startGame(){
         this.gameFrame.dispatchEvent(new WindowEvent(this.gameFrame, WindowEvent.WINDOW_CLOSING));
         this.gameFrame = new JFrame("CHESS 2D - Group 25");
@@ -121,11 +119,19 @@ public class Frame extends Observable{
         show();
     }
 
+    public BoardDirection getBoardDirection() {
+        return this.boardDirection;
+    }
+
+    public boolean getHighlightLegalMoves() {
+        return this.highlightLegalMoves;
+    }
+
     public class TestPane extends JPanel {
 
-        private List<String> menuItems;
-        private String selectMenuItem = null;
-        private String focusedItem = null;
+        public List<String> menuItems;
+        public String selectMenuItem = null;
+        public String focusedItem = null;
 
         private MenuItemPainter painter;
         private Map<String, Rectangle> menuBounds;
@@ -150,6 +156,7 @@ public class Frame extends Observable{
                             selectMenuItem = text;
                             if(text.equalsIgnoreCase("Start game")){
                                 //System.out.println("fish test");
+                                setGameStart(true);
                                 startGame();
                                 break;
                             }
@@ -199,6 +206,14 @@ public class Frame extends Observable{
             am.put("arrowDown", new MenuAction(1));
             am.put("arrowUp", new MenuAction(-1));
 
+        }
+
+        public void setSelectMenuItem(String selectMenuItem) {
+            this.selectMenuItem = selectMenuItem;
+        }
+
+        public String getSelectMenuItem() {
+            return selectMenuItem;
         }
 
         @Override
@@ -320,11 +335,31 @@ public class Frame extends Observable{
         return INSTANCE;
     }
 
+    public void setGameStart(boolean gameStart) {
+        this.gameStart = gameStart;
+    }
+
+    public boolean getGameStart(){
+        return this.gameStart;
+    }
+
+    public Dimension getTilePanelDimension() {
+        return TILE_PANEL_DIMENSION;
+    }
+
     public void show() {
         Frame.get().getMoveLog().clear();
         Frame.get().getGameHistoryPanel().redo(chessBoard, Frame.get().getMoveLog());
         Frame.get().getTakenPiecesPanel().redo(Frame.get().getMoveLog());
         Frame.get().getBoardPanel().drawBoard(Frame.get().getGameBoard());
+    }
+
+    public void setCheckMateCheck(boolean checkMateCheck) {
+        this.checkMateCheck = checkMateCheck;
+    }
+
+    public boolean getCheckMateCheck(){
+        return this.checkMateCheck;
     }
 
     private JMenuBar createTableMenuBar(){
@@ -413,12 +448,12 @@ public class Frame extends Observable{
         });
         //preferencesMenu.add(flipBoardMenuItem);
 
-        preferencesMenu.addSeparator();
         final JCheckBoxMenuItem legalMoveHighlighterCheckbox = new JCheckBoxMenuItem("Highlight legal moves", true);
         legalMoveHighlighterCheckbox.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 highlightLegalMoves = legalMoveHighlighterCheckbox.isSelected();
+
             }
         });
         preferencesMenu.add(legalMoveHighlighterCheckbox);
@@ -432,6 +467,24 @@ public class Frame extends Observable{
                 boardPanel.drawBoard(chessBoard);
             }
         });
+
+        final JMenuItem reFrameMenuItem = new JMenuItem(("ReFrame"));
+        reFrameMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        preferencesMenu.add(reFrameMenuItem);
+
+        final JMenuItem changePieceArt = new JMenuItem("Change Piece Art");
+        changePieceArt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        preferencesMenu.add(changePieceArt);
 
         preferencesMenu.add(tileColourMenuItem);
         return preferencesMenu;
@@ -484,15 +537,27 @@ public class Frame extends Observable{
                 thinkTank.execute();
             }
 
-            if (Frame.get().getGameBoard().currentPlayer().isInCheckMate()) {
+            if (Frame.get().getGameBoard().currentPlayer().isInCheckMate() ) {
                 JOptionPane.showMessageDialog(Frame.get().getBoardPanel(),
                         "Game Over: Player " + Frame.get().getGameBoard().currentPlayer() + " is in checkmate!", "GameOver",
                         JOptionPane.INFORMATION_MESSAGE);
+                Frame.get().setCheckMateCheck(true);
+            }
+            else if(Frame.get().getGameBoard().currentPlayer().getOpponent().isInCheckMate()){
+                JOptionPane.showMessageDialog(Frame.get().getBoardPanel(),
+                        "Game Over: Player " + Frame.get().getGameBoard().currentPlayer().getOpponent() + " is in checkmate!", "GameOver",
+                        JOptionPane.INFORMATION_MESSAGE);
+                Frame.get().setCheckMateCheck(true);
             }
 
             if (Frame.get().getGameBoard().currentPlayer().isInStaleMate()) {
                 JOptionPane.showMessageDialog(Frame.get().getBoardPanel(),
                         "Game Over: Player " + Frame.get().getGameBoard().currentPlayer() + " is in stalemate!", "GameOver",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            else if(Frame.get().getGameBoard().currentPlayer().getOpponent().isInStaleMate()){
+                JOptionPane.showMessageDialog(Frame.get().getBoardPanel(),
+                        "Game Over: Player " + Frame.get().getGameBoard().currentPlayer().getOpponent() + " is in stalemate!", "GameOver",
                         JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -531,16 +596,24 @@ public class Frame extends Observable{
         notifyObservers(playerType);
     }
 
-    private BoardPanel getBoardPanel() {
+    public BoardPanel getBoardPanel() {
         return this.boardPanel;
     }
 
-    private TakenPiecesPanel getTakenPiecesPanel() {
+    public TakenPiecesPanel getTakenPiecesPanel() {
         return this.takenPiecesPanel;
     }
 
-    private GameHistoryPanel getGameHistoryPanel() {
+    public GameHistoryPanel getGameHistoryPanel() {
         return this.gameHistoryPanel;
+    }
+
+    public Board getChessBoard() {
+        return chessBoard;
+    }
+
+    public JFrame getGameFrame() {
+        return gameFrame;
     }
 
     private MoveLog getMoveLog() {
@@ -590,7 +663,7 @@ public class Frame extends Observable{
 
     }
 
-    private class BoardPanel extends JPanel{
+    public class BoardPanel extends JPanel{
         final List<TilePanel> boardTiles;
 
         BoardPanel(){
@@ -761,7 +834,8 @@ public class Frame extends Observable{
                 for (final Move move : pieceLegalMoves(board) ) {
                     if (move.getDestinationCoordinate() == this.tileId) {
                         try{
-                            add(new JLabel(new ImageIcon(ImageIO.read(new File(filePath)))));
+                            //add(new JLabel(new ImageIcon(ImageIO.read(new File(filePath)))));
+                            assignTileLegalMoveColor();
                         } catch(Exception e){
                             e.printStackTrace();
                         }
@@ -776,18 +850,23 @@ public class Frame extends Observable{
             }
             return Collections.emptyList();
         }
+        private void assignTileLegalMoveColor(){
+            setBackground(new Color(164, 249, 6, 200));
+        }
 
         private void assignTileColor(){
             if(BoardUtils.EIGHTH_RANK[this.tileId] ||
                     BoardUtils.SIXTH_RANK[this.tileId] ||
                     BoardUtils.FOURTH_RANK[this.tileId] ||
                     BoardUtils.SECOND_RANK[this.tileId]){
-                setBackground(this.tileId % 2 == 0 ? lightTileColor : darkTileColor);
+                if (this.tileId % 2 == 0) setBackground(lightTileColor);
+                else setBackground(darkTileColor);
             } else if(BoardUtils.SEVENTH_RANK[this.tileId] ||
                     BoardUtils.FIFTH_RANK[this.tileId] ||
                     BoardUtils.THIRD_RANK[this.tileId] ||
                     BoardUtils.FIRST_RANK[this.tileId]){
-                setBackground(this.tileId % 2 != 0 ? lightTileColor : darkTileColor);
+                if (this.tileId % 2 != 0) setBackground(lightTileColor);
+                else setBackground(darkTileColor);
             }
         }
     }

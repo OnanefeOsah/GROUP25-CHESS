@@ -7,4 +7,6 @@ import game_chess.engine.board.Move;
 public interface MoveStrategy {
 
     Move execute(Board board);
+    long getNumBoardsEvaluated();
+
 }

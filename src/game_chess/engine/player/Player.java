@@ -35,7 +35,6 @@ public abstract class Player {
         legal.addAll(legalMoves);
         legal.addAll(calculateKingCastles(legalMoves, opponentMoves));
         this.legalMoves = legal;
-
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
 
     }
@@ -59,7 +58,7 @@ public abstract class Player {
         return Collections.unmodifiableList(attackMoves);
     }
 
-    //establishKing method to ensure there is a valid King for each player
+    //establish King method to ensure there is a valid King for each player
     private King establishKing() {
         //iterate through active pieces to find king piece for each player
         for (final Piece piece : getActivePieces()) {

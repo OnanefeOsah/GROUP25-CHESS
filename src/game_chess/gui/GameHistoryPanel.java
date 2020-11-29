@@ -11,15 +11,19 @@ import java.util.List;
 
 import static game_chess.gui.Frame.*;
 
-//Cretaed by Adeoluwa Oyefeso
+/**
+ * Author: Ade Oyefeso
+ * Author: Robert Odoh
+ * Date Created:
+ *
+ * GUI class for the Board
+ * **/
 
-
-//creating the game history panel
 public class GameHistoryPanel extends JPanel{
 
     private final DataModel model;
     private final JScrollPane scrollPane;
-    private static final Dimension HISTORY_PANEL_DIMENSION = new Dimension(100,400);
+    public static final Dimension HISTORY_PANEL_DIMENSION = new Dimension(100,400);
 
     GameHistoryPanel(){
 

@@ -7,6 +7,8 @@ import game_chess.engine.player.WhitePlayer;
 import game_chess.engine.player.BlackPlayer;
 import java.util.ArrayList;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Author: Onanefe Osah
@@ -93,6 +95,10 @@ public class Board{
     //method to return all current white pieces
     public Collection<Piece> getWhitePieces(){
         return this.whitePieces;
+    }
+
+    public Collection<Piece> getAllPieces(){
+        return Stream.concat(this.whitePieces.stream(), this.blackPieces.stream()).collect(Collectors.toList());
     }
 
     //method to calculate all legal moves for the pieces instantiated on the board using tile locations
